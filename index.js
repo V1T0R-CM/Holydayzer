@@ -23,15 +23,20 @@ server.get("/holidays", (req, res) => {
     res.send(holidays);
 });
 
+server.get('/holidays/:mes', (req, res) => {
+    const mesRequerido = req.params.mes;
+    res.send(holidays.filter(dataComemorativa => Number(dataComemorativa.date.split("/")[0])===Number(mesRequerido)));
+});
+
 server.get("/is-today-holiday", (req, res) => {
-    let ehFeriado = false
+    let ehFeriado = false;
     const hoje = new Date();
     const [diaHoje,mesHoje,anoHoje]=hoje.toLocaleDateString().split("/");
     for(let dataComemorativa of holidays){
         let [mes, dia, ano]=dataComemorativa.date.split("/");
         if(Number(dia)===Number(diaHoje) && Number(mes)===Number(mesHoje) && Number(ano)===Number(anoHoje)){
             ehFeriado=true;
-            break
+            break;
         }
     }
     if(ehFeriado){
